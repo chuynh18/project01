@@ -1,11 +1,11 @@
 "use strict";
 var placesResponse;
 
-var placesTextSearch = function() {
+var placesTextSearch = function(type) {
     // this is where the magic on the client side happens
     var searchQuery = $("#destinationSearch").val();
-    var queryURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchQuery + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ&type=campground"
-    console.log(queryURL);
+    var queryURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchQuery + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ&type=" + type;
+    // console.log(queryURL);
     
     // Creates AJAX call to Places API
     $.ajax({
@@ -16,7 +16,7 @@ var placesTextSearch = function() {
         $("#cardsHere").empty();
         $("#sampleParks").empty();
 
-        // console.log(response);
+        console.log(response);
         placesResponse = response;
 
         var pois = $("<h2>");
@@ -24,7 +24,7 @@ var placesTextSearch = function() {
         pois.html("<br>Points of Interest<br>");
         $("#cardsHere").append(pois);
 
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 3; i++) {
             var bootstrapCard = $("<div>");
             bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 attraction");
             bootstrapCard.attr("style", "width: 18rem;");
@@ -74,6 +74,12 @@ var placesTextSearch = function() {
 
 document.getElementById("destinationSearch").onkeypress = function(event){
     if (event.keyCode == 13 || event.which == 13){
-        placesTextSearch();
+        placesTextSearch("park");
+        setTimeout(function() {
+            placesTextSearch("campground");
+        }, 1000);
+        setTimeout(function() {
+            placesTextSearch("parking");
+        }, 2000);
     }
 };
