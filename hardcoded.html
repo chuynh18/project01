@@ -29,17 +29,17 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand oswald" href="index.html">Trail Mixed</a>
+      <a class="navbar-brand oswald" href="#">Trail Mixed</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-item nav-link oswald" href="localhikes.html">Local Hikes</a>
-          <a class="nav-item nav-link oswald" href="weather.html">Weather</a>
-          <a class="nav-item nav-link oswald" href="campground.html">Campground Reservations</a>
-          <a class="nav-item nav-link oswald" href="gear.html">Camping Gear</a>
-          <a class="nav-item nav-link oswald" href="activities.html">Activities</a>
+          <a class="nav-item nav-link oswald" href="#">Local Hikes</a>
+          <a class="nav-item nav-link oswald" href="#">Weather</a>
+          <a class="nav-item nav-link oswald" href="#">Campground Reservations</a>
+          <a class="nav-item nav-link oswald" href="#">Camping Gear</a>
+          <a class="nav-item nav-link oswald" href="#">Activities</a>
         </div>
       </div>
     </nav>
@@ -80,7 +80,6 @@
               mapTypeId: 'roadmap'
               });
 
-
               // Create the search box and link it to the UI element.
               var input = document.getElementById('destinationSearch');
               var searchBox = new google.maps.places.SearchBox(input);
@@ -100,6 +99,7 @@
               if (places.length == 0) {
                   return;
               }
+
               // Clear out the old markers.
               markers.forEach(function(marker) {
                   marker.setMap(null);
@@ -147,9 +147,7 @@
   <div class="text-center" id="cardsHere">
   </div>
   <div class="text-center" id="weather"></div>
-
   <!-- <pre class="jsonHere"></pre> -->
-
 
     <!-- Icons Grid -->
     <section class="features-icons bg-light text-center" id="sampleParks">
@@ -261,13 +259,11 @@
       </div>
     </footer>
 
-    <!-- our custom js file -->
-    <script src="assets/javascript/script.js"></script>
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- our custom js file -->
-    <script src="assets/javascript/script.js"></script>
+    <script src="assets/javascript/hardcoded.js"></script>
 
   </body>
 

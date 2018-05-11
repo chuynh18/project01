@@ -39,6 +39,7 @@ html, body {
 
 .form-control {
     width: 80% !important;
+
 }
 
 /* For Local Hikes Page */
@@ -683,3 +684,5 @@ body {
     padding-top: 4rem;
     padding-bottom: 4rem;
   }
+}
+
