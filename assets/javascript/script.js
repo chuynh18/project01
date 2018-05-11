@@ -6,6 +6,11 @@ var clickedPark;
 var emptyCardsAndParks = function() {
     $("#cardsHere").empty();
     $("#sampleParks").empty();
+
+    var pois = $("<h2>");
+    pois.addClass("fredericka");
+    pois.html("<br>Points of Interest<br>");
+    $("#cardsHere").append(pois);
 };
 
 var placesTextSearch = function(type) {
@@ -23,12 +28,7 @@ var placesTextSearch = function(type) {
         console.log(response);
         placesResponse = response;
 
-        var pois = $("<h2>");
-        pois.addClass("fredericka");
-        pois.html("<br>Points of Interest<br>");
-        $("#cardsHere").append(pois);
-
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 4; i++) {
             var bootstrapCard = $("<div>");
             bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 attraction");
             bootstrapCard.attr("style", "width: 18rem;");
@@ -82,15 +82,11 @@ $(document).ready(function() {
         if (event.keyCode == 13 || event.which == 13){
             emptyCardsAndParks();
 
-            placesTextSearch("park");
-
-            setTimeout(function() {
-                placesTextSearch("campground");
-            }, 1000);
+            placesTextSearch("campground");
 
             setTimeout(function() {
                 placesTextSearch("parking");
-            }, 2000);
+            }, 1000);
         }
     };
 
@@ -100,15 +96,13 @@ $(document).ready(function() {
         clickedPark = $(this).data("park");
         $('#destinationSearch').val(clickedPark);
 
-        placesTextSearch("park");
+        emptyCardsAndParks();
 
-        setTimeout(function() {
-            placesTextSearch("campground");
-        }, 1000);
+        placesTextSearch("campground");
 
         setTimeout(function() {
             placesTextSearch("parking");
-        }, 2000);
+        }, 1000);
 
         return false;
     })
