@@ -28,6 +28,10 @@ html, body {
     display: inline-block;
 }
 
+.attraction:hover {
+    background-color: #ccc;
+}
+
 .site-title {
     color: #eee;
     font-size: 56pt !important;

@@ -26,7 +26,7 @@ var placesTextSearch = function() {
 
         for (var i = 0; i < 8; i++) {
             var bootstrapCard = $("<div>");
-            bootstrapCard.addClass("card col-md-4 pt-3 attraction");
+            bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 attraction");
             bootstrapCard.attr("style", "width: 18rem;");
             bootstrapCard.attr("data-id", placesResponse.results[i].id);
             bootstrapCard.attr("data-lat", placesResponse.results[i].geometry.location.lat);
@@ -37,7 +37,7 @@ var placesTextSearch = function() {
 
             var cardImg = $("<img>");
             cardImg.addClass("card-img-top");
-            cardImg.attr("src", "https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photoreference=" + placesResponse.results[i].photos[0].photo_reference + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ");
+            cardImg.attr("src", "https://maps.googleapis.com/maps/api/place/photo?maxwidth=350&photoreference=" + placesResponse.results[i].photos[0].photo_reference + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ");
             cardImg.attr("alt", placesResponse.results[i].name)
 
             var cardTitle = $("<h5>");
