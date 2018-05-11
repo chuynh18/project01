@@ -1,6 +1,7 @@
 "use strict";
 
 var placesResponse;
+var clickedPark;
 
 var emptyCardsAndParks = function() {
     $("#cardsHere").empty();
@@ -75,12 +76,32 @@ var placesTextSearch = function(type) {
     };
 })();
 
-document.getElementById("destinationSearch").onkeypress = function(event){
-    if (event.keyCode == 13 || event.which == 13){
-        emptyCardsAndParks();
+$(document).ready(function() {
+
+    document.getElementById("destinationSearch").onkeypress = function(event){
+        if (event.keyCode == 13 || event.which == 13){
+            emptyCardsAndParks();
+
+            placesTextSearch("park");
+
+            setTimeout(function() {
+                placesTextSearch("campground");
+            }, 1000);
+
+            setTimeout(function() {
+                placesTextSearch("parking");
+            }, 2000);
+        }
+    };
+
+    $(document).on("click", ".park-button", function() {
+        window.scrollTo(0, 620);
+
+        clickedPark = $(this).data("park");
+        $('#destinationSearch').val(clickedPark);
 
         placesTextSearch("park");
-        
+
         setTimeout(function() {
             placesTextSearch("campground");
         }, 1000);
@@ -88,5 +109,8 @@ document.getElementById("destinationSearch").onkeypress = function(event){
         setTimeout(function() {
             placesTextSearch("parking");
         }, 2000);
-    }
-};
+
+        return false;
+    })
+
+});
