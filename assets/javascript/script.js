@@ -109,4 +109,17 @@ $(document).ready(function() {
         return false;
     })
 
+
 });
+
+// For weather page
+
+var weatherResponse;
+
+var weatherTextSearch = function(){
+    var weatherQuery = $("#destinationSearch").val();
+    var queryURL =""
+}
+
+});
+

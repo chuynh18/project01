@@ -80,6 +80,7 @@
               mapTypeId: 'roadmap'
               });
 
+
               // Create the search box and link it to the UI element.
               var input = document.getElementById('destinationSearch');
               var searchBox = new google.maps.places.SearchBox(input);
@@ -99,7 +100,6 @@
               if (places.length == 0) {
                   return;
               }
-
               // Clear out the old markers.
               markers.forEach(function(marker) {
                   marker.setMap(null);
@@ -147,7 +147,9 @@
   <div class="text-center" id="cardsHere">
   </div>
   <div class="text-center" id="weather"></div>
+
   <!-- <pre class="jsonHere"></pre> -->
+
 
     <!-- Icons Grid -->
     <section class="features-icons bg-light text-center" id="sampleParks">
@@ -259,6 +261,8 @@
       </div>
     </footer>
 
+    <!-- our custom js file -->
+    <script src="assets/javascript/script.js"></script>
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
