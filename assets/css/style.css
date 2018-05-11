@@ -553,6 +553,9 @@ body {
     padding-bottom: 4rem;
   }
 
+  .weatherbar {
+    width: 100% !important;
+  }
    /* For Activities Page */
 body {
     font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;

@@ -77,3 +77,12 @@ document.getElementById("destinationSearch").onkeypress = function(event){
         placesTextSearch();
     }
 };
+
+// For weather page
+
+var weatherResponse;
+
+var weatherTextSearch = function(){
+    var weatherQuery = $("#destinationSearch").val();
+    var queryURL =""
+}
