@@ -1,11 +1,25 @@
 "use strict";
-var placesResponse;
 
-var placesTextSearch = function() {
+var placesResponse;
+var clickedPark;
+var campground;
+var parking;
+
+var emptyCardsAndParks = function() {
+    $("#cardsHere").empty();
+    $("#sampleParks").empty();
+
+    var pois = $("<h2>");
+    pois.addClass("fredericka");
+    pois.html("<br>Points of Interest<br>");
+    $("#cardsHere").append(pois);
+};
+
+var placesTextSearch = function(type) {
     // this is where the magic on the client side happens
     var searchQuery = $("#destinationSearch").val();
-    var queryURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchQuery + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ&type=campground"
-    console.log(queryURL);
+    var queryURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchQuery + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ&type=" + type;
+    // console.log(queryURL);
     
     // Creates AJAX call to Places API
     $.ajax({
@@ -13,18 +27,10 @@ var placesTextSearch = function() {
     method: "GET"
     }).then(function(response) {
 
-        $("#cardsHere").empty();
-        $("#sampleParks").empty();
-
-        // console.log(response);
+        console.log(response);
         placesResponse = response;
 
-        var pois = $("<h2>");
-        pois.addClass("fredericka");
-        pois.html("<br>Points of Interest<br>");
-        $("#cardsHere").append(pois);
-
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 4; i++) {
             var bootstrapCard = $("<div>");
             bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 attraction");
             bootstrapCard.attr("style", "width: 18rem;");
@@ -51,7 +57,7 @@ var placesTextSearch = function() {
             $("#cardsHere").append(bootstrapCard);
         };
 
-        // $("#cardsHere").text(JSON.stringify(response,null,'\t'));
+        // $(".jsonHere").text(JSON.stringify(response,null,'\t'));
     });
 };
 
@@ -72,11 +78,38 @@ var placesTextSearch = function() {
     };
 })();
 
-document.getElementById("destinationSearch").onkeypress = function(event){
-    if (event.keyCode == 13 || event.which == 13){
-        placesTextSearch();
-    }
-};
+$(document).ready(function() {
+
+    document.getElementById("destinationSearch").onkeypress = function(event){
+        if (event.keyCode == 13 || event.which == 13){
+            emptyCardsAndParks();
+
+            placesTextSearch("campground");
+
+            setTimeout(function() {
+                placesTextSearch("parking");
+            }, 1000);
+        }
+    };
+
+    $(document).on("click", ".park-button", function() {
+        window.scrollTo(0, 620);
+
+        clickedPark = $(this).data("park");
+        $('#destinationSearch').val(clickedPark);
+
+        emptyCardsAndParks();
+
+        placesTextSearch("campground");
+
+        setTimeout(function() {
+            placesTextSearch("parking");
+        }, 1000);
+
+        return false;
+    })
+
+});
 
 // For weather page
 
