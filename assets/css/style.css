@@ -32,3 +32,7 @@ html, body {
     color: #eee;
     font-size: 56pt !important;
 }
+
+.form-control {
+    width: 80% !important;
+}
