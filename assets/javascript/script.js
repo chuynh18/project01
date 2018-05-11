@@ -2,6 +2,8 @@
 
 var placesResponse;
 var clickedPark;
+var campground;
+var parking;
 
 var emptyCardsAndParks = function() {
     $("#cardsHere").empty();
@@ -55,7 +57,7 @@ var placesTextSearch = function(type) {
             $("#cardsHere").append(bootstrapCard);
         };
 
-        // $("#cardsHere").text(JSON.stringify(response,null,'\t'));
+        // $(".jsonHere").text(JSON.stringify(response,null,'\t'));
     });
 };
 
