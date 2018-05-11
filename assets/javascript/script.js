@@ -28,6 +28,9 @@ var placesTextSearch = function() {
             var bootstrapCard = $("<div>");
             bootstrapCard.addClass("card col-md-4 pt-3 attraction");
             bootstrapCard.attr("style", "width: 18rem;");
+            bootstrapCard.attr("data-id", placesResponse.results[i].id);
+            bootstrapCard.attr("data-lat", placesResponse.results[i].geometry.location.lat);
+            bootstrapCard.attr("data-lng", placesResponse.results[i].geometry.location.lng);
             
             var cardBody = $("<div>");
             cardBody.addClass("card-body");
