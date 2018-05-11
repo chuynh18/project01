@@ -1,5 +1,11 @@
 "use strict";
+
 var placesResponse;
+
+var emptyCardsAndParks = function() {
+    $("#cardsHere").empty();
+    $("#sampleParks").empty();
+};
 
 var placesTextSearch = function(type) {
     // this is where the magic on the client side happens
@@ -12,9 +18,6 @@ var placesTextSearch = function(type) {
     url: queryURL,
     method: "GET"
     }).then(function(response) {
-
-        $("#cardsHere").empty();
-        $("#sampleParks").empty();
 
         console.log(response);
         placesResponse = response;
@@ -74,10 +77,14 @@ var placesTextSearch = function(type) {
 
 document.getElementById("destinationSearch").onkeypress = function(event){
     if (event.keyCode == 13 || event.which == 13){
+        emptyCardsAndParks();
+
         placesTextSearch("park");
+        
         setTimeout(function() {
             placesTextSearch("campground");
         }, 1000);
+
         setTimeout(function() {
             placesTextSearch("parking");
         }, 2000);
