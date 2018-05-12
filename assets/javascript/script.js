@@ -15,7 +15,7 @@ var emptyCardsAndParks = function() {
     $("#cardsHere").append(pois);
 };
 
-var placesTextSearch = function(type) {
+var placesTextSearch = function(type, numResults) {
     // this is where the magic on the client side happens
     var searchQuery = $("#destinationSearch").val();
     var queryURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchQuery + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ&type=" + type;
@@ -30,7 +30,7 @@ var placesTextSearch = function(type) {
         console.log(response);
         placesResponse = response;
 
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < numResults; i++) {
             var bootstrapCard = $("<div>");
             bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 attraction");
             bootstrapCard.attr("style", "width: 18rem;");
@@ -85,10 +85,10 @@ $(document).ready(function() {
         if (event.keyCode == 13 || event.which == 13){
             emptyCardsAndParks();
 
-            placesTextSearch("campground");
+            placesTextSearch("campground", 6);
 
             setTimeout(function() {
-                placesTextSearch("parking");
+                placesTextSearch("parking", 2);
             }, 1000);
         }
     };
@@ -106,10 +106,10 @@ $(document).on("click", ".park-button", function(event) {
 
     emptyCardsAndParks();
 
-    placesTextSearch("campground");
+    placesTextSearch("campground", 6);
 
         setTimeout(function() {
-            placesTextSearch("parking");
+            placesTextSearch("parking", 2);
         }, 1000);
 
     window.scrollTo(0, 620);
@@ -144,12 +144,11 @@ $(document).on("click", ".attraction", function(event) {
 
 // For weather page
 
-var weatherResponse;
+// var weatherResponse;
 
-var weatherTextSearch = function(){
-    var weatherQuery = $("#destinationSearch").val();
-    var queryURL =""
-}
+// var weatherTextSearch = function(){
+//     var weatherQuery = $("#destinationSearch").val();
+//     var queryURL =""
+// }
 
-});
-
+// });
