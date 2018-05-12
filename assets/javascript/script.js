@@ -37,6 +37,7 @@ var placesTextSearch = function(type) {
             bootstrapCard.attr("data-id", placesResponse.results[i].id);
             bootstrapCard.attr("data-lat", placesResponse.results[i].geometry.location.lat);
             bootstrapCard.attr("data-lng", placesResponse.results[i].geometry.location.lng);
+            bootstrapCard.attr("data-name", placesResponse.results[i].name);
             
             var cardBody = $("<div>");
             cardBody.addClass("card-body");
@@ -110,6 +111,21 @@ $(document).ready(function() {
     })
 
 
+});
+
+// for clicking on campground/parking cards and seeing marker on the map
+$(document).on("click", ".attraction", function(event) {
+	window.scrollTo(0, 620);
+	map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
+    });
+
+    var marker = new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("name")
+    });
 });
 
 // For weather page
