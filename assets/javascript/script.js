@@ -15,7 +15,7 @@ var emptyCardsAndParks = function() {
     $("#cardsHere").append(pois);
 };
 
-var placesTextSearch = function(type) {
+var placesTextSearch = function(type, numResults) {
     // this is where the magic on the client side happens
     var searchQuery = $("#destinationSearch").val();
     var queryURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchQuery + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ&type=" + type;
@@ -30,13 +30,14 @@ var placesTextSearch = function(type) {
         console.log(response);
         placesResponse = response;
 
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < numResults; i++) {
             var bootstrapCard = $("<div>");
             bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 attraction");
             bootstrapCard.attr("style", "width: 18rem;");
             bootstrapCard.attr("data-id", placesResponse.results[i].id);
             bootstrapCard.attr("data-lat", placesResponse.results[i].geometry.location.lat);
             bootstrapCard.attr("data-lng", placesResponse.results[i].geometry.location.lng);
+            bootstrapCard.attr("data-name", placesResponse.results[i].name);
             
             var cardBody = $("<div>");
             cardBody.addClass("card-body");
@@ -84,42 +85,70 @@ $(document).ready(function() {
         if (event.keyCode == 13 || event.which == 13){
             emptyCardsAndParks();
 
-            placesTextSearch("campground");
+            placesTextSearch("campground", 6);
 
             setTimeout(function() {
-                placesTextSearch("parking");
+                placesTextSearch("parking", 2);
             }, 1000);
         }
     };
 
-    $(document).on("click", ".park-button", function() {
-        window.scrollTo(0, 620);
+});
 
-        clickedPark = $(this).data("park");
-        $('#destinationSearch').val(clickedPark);
+// for clicking on prepopulated cards
+$(document).on("click", ".park-button", function(event) {
+    event.preventDefault()
 
-        emptyCardsAndParks();
+    clickedPark = $(this).data("park");
+    console.log(clickedPark);
+    $('#destinationSearch').val(clickedPark);
+    $('#destinationSearch').submit();
 
-        placesTextSearch("campground");
+    emptyCardsAndParks();
+
+    placesTextSearch("campground", 6);
 
         setTimeout(function() {
-            placesTextSearch("parking");
+            placesTextSearch("parking", 2);
         }, 1000);
 
-        return false;
-    })
+    window.scrollTo(0, 620);
 
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
+    });
 
+    var marker = new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("park")
+    });
+
+});
+
+// for clicking on campground/parking cards and seeing marker on the map
+$(document).on("click", ".attraction", function(event) {
+	window.scrollTo(0, 620);
+	var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
+    });
+
+    var marker = new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("name")
+    });
 });
 
 // For weather page
 
-var weatherResponse;
+// var weatherResponse;
 
-var weatherTextSearch = function(){
-    var weatherQuery = $("#destinationSearch").val();
-    var queryURL =""
-}
+// var weatherTextSearch = function(){
+//     var weatherQuery = $("#destinationSearch").val();
+//     var queryURL =""
+// }
 
-});
-
+// });

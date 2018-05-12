@@ -685,7 +685,8 @@ var parkingSearch = function() {
         bootstrapCard.attr("style", "width: 18rem;");
         bootstrapCard.attr("data-id", parking.results[i].id);
         bootstrapCard.attr("data-lat", parking.results[i].geometry.location.lat);
-        bootstrapCard.attr("data-lng", parking.results[i].geometry.location.lng);
+		bootstrapCard.attr("data-lng", parking.results[i].geometry.location.lng);
+		bootstrapCard.attr("data-name", parking.results[i].name);
         
         var cardBody = $("<div>");
         cardBody.addClass("card-body");
@@ -726,7 +727,7 @@ $(document).on("click", ".park-button", function(event) {
 
     window.scrollTo(0, 620);
 
-    map = new google.maps.Map(document.getElementById('map'), {
+    var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 10,
         center: {lat: 36.505, lng: -117.079}
     });
@@ -737,4 +738,18 @@ $(document).on("click", ".park-button", function(event) {
         title: 'Death Valley National Park'
     });
 
+});
+
+$(document).on("click", ".attraction", function(event) {
+	window.scrollTo(0, 620);
+	var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
+    });
+
+    var marker = new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("name")
+    });
 });
