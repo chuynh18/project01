@@ -93,31 +93,45 @@ $(document).ready(function() {
         }
     };
 
-    $(document).on("click", ".park-button", function() {
-        window.scrollTo(0, 620);
+});
 
-        clickedPark = $(this).data("park");
-        $('#destinationSearch').val(clickedPark);
+// for clicking on prepopulated cards
+$(document).on("click", ".park-button", function(event) {
+    event.preventDefault()
 
-        emptyCardsAndParks();
+    clickedPark = $(this).data("park");
+    console.log(clickedPark);
+    $('#destinationSearch').val(clickedPark);
+    $('#destinationSearch').submit();
 
-        placesTextSearch("campground");
+    emptyCardsAndParks();
+
+    placesTextSearch("campground");
 
         setTimeout(function() {
             placesTextSearch("parking");
         }, 1000);
 
-        return false;
-    })
+    window.scrollTo(0, 620);
 
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
+    });
+
+    var marker = new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("park")
+    });
 
 });
 
 // for clicking on campground/parking cards and seeing marker on the map
 $(document).on("click", ".attraction", function(event) {
 	window.scrollTo(0, 620);
-	map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 10,
+	var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
         center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
     });
 

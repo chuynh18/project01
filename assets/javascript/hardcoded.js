@@ -727,7 +727,7 @@ $(document).on("click", ".park-button", function(event) {
 
     window.scrollTo(0, 620);
 
-    map = new google.maps.Map(document.getElementById('map'), {
+    var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 10,
         center: {lat: 36.505, lng: -117.079}
     });
@@ -742,8 +742,8 @@ $(document).on("click", ".park-button", function(event) {
 
 $(document).on("click", ".attraction", function(event) {
 	window.scrollTo(0, 620);
-	map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 10,
+	var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
         center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
     });
 
