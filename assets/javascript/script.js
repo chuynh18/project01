@@ -335,16 +335,18 @@ var geolocateThenWeatherSearch = function() {
 // also using the google maps text entry box to kick off WUnderground and Places text search
 document.getElementById("destinationSearch").onkeypress = function(event){
 	if (event.keyCode == 13 || event.which == 13){
-		
-        geolocateThenWeatherSearch();
 
-        emptyCardsAndParks();
-
-        placesTextSearch("campground", 6);
-
-        setTimeout(function() {
-            placesTextSearch("parking", 2);
-        }, 1000);
-
+        if (document.getElementById("destinationSearch").value === "") {
+            document.getElementById("errorMsg").textContent = "Don't just leave the search box blank.  Type something in!";
+        }
+        else {
+            document.getElementById("errorMsg").textContent = "";
+            geolocateThenWeatherSearch();
+            emptyCardsAndParks();
+            placesTextSearch("campground", 6);
+            setTimeout(function() {
+                placesTextSearch("parking", 2);
+            }, 1000);
+        };
 	};
 };
