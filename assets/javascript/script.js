@@ -157,10 +157,12 @@ $(document).on("click", ".attraction", function(event) {
 });
 
 var renderWeather = function() {
+    // this makes it so future searches don't get appended to the previous search
 	$("#weather").empty();
 
+    // this writes "Weather" at the top of the weather section
 	var weatherTitleRow = $("<div>");
-	weatherTitleRow.addClass("row text-center mt-3");
+	weatherTitleRow.addClass("row text-center mt-3 mb-4");
 	var weatherTitleColumn = $("<div>");
 	weatherTitleColumn.addClass("col-md");
 
@@ -172,6 +174,7 @@ var renderWeather = function() {
 
 	$("#weather").append(weatherTitleRow);
 
+    // beginning of code that draws the current weather conditions Bootstrap card
 	var cardRow = $("<div>");
 	cardRow.addClass("row justify-content-center mx-auto oswald");
 
@@ -185,11 +188,12 @@ var renderWeather = function() {
 	var cardHeader = $("<div>");
 	cardHeader.addClass("card-header text-center");
 	var cardHeaderText = $("<h3>");
-	cardHeaderText.text($("#destinationSearch").val() + " ");
+	cardHeaderText.text($("#destinationSearch").val());
 	cardHeaderText.addClass("oswald");
 	var weatherIcon = $("<img>");
 	weatherIcon.attr("alt", weatherObservation.icon);
 	weatherIcon.attr("src", weatherObservation.icon_url);
+	cardHeaderText.append("<br>Current conditions ")
 	cardHeaderText.append(weatherIcon);
 	cardHeader.append(cardHeaderText);
 	currentWeatherCard.append(cardHeader);
@@ -223,6 +227,61 @@ var renderWeather = function() {
 	cardRow.append(cardColumn);
 	$("#weather").append(cardRow);
 
+    // this is the beginning of the four day forecast table
+    var forecastRow = $("<div>");
+	forecastRow.addClass("row mt-3");
+	var forecastColumn = $("<div>");
+	forecastColumn.addClass("col-md-8 mx-auto justify-content-center");
+
+	var forecastTable = $("<table>");
+	forecastTable.addClass("table table-striped")
+	var tableHead = $("<thead>");
+	var tableHeadRow = $("<tr>");
+
+	var tableHeadDay = $("<th>");
+	tableHeadDay.attr("scope", "col");
+	tableHeadDay.text("Day");
+	tableHeadRow.append(tableHeadDay);
+
+	var tableHeadForecast = $("<th>");
+	tableHeadForecast.addClass("text-center");
+	tableHeadForecast.attr("scope", "col");
+	tableHeadForecast.attr("colspan", 2);
+	tableHeadForecast.text("Forecast");
+	tableHeadRow.append(tableHeadForecast);
+
+	tableHead.append(tableHeadRow);
+	forecastTable.append(tableHead);
+
+	var forecastBody = $("<tbody>");
+
+    // the for loop that is responsible for adding each row
+    // 8 entries, because each day has two (one for daytime, one for nighttime)
+	for (var i = 0; i < weatherForecast.txt_forecast.forecastday.length; i++) {
+		var forecastEntry = $("<tr>");
+
+		var forecastDay = $("<td>");
+		forecastDay.text(weatherForecast.txt_forecast.forecastday[i].title);
+		forecastEntry.append(forecastDay);
+
+		var forecastIcon = $("<td>");
+		var weatherIcon = $("<img>");
+		weatherIcon.attr("alt", weatherForecast.txt_forecast.forecastday[i].icon);
+		weatherIcon.attr("src", weatherForecast.txt_forecast.forecastday[i].icon_url);
+		forecastIcon.append(weatherIcon);
+		forecastEntry.append(forecastIcon);
+
+		var forecastText = $("<td>");
+		forecastText.text(weatherForecast.txt_forecast.forecastday[i].fcttext);
+		forecastEntry.append(forecastText);
+
+		forecastBody.append(forecastEntry);
+	};
+
+	forecastTable.append(forecastBody);
+	forecastColumn.append(forecastTable);
+	forecastRow.append(forecastColumn);
+	$("#weather").append(forecastRow);
 };
 
 var weatherSearch = function() {

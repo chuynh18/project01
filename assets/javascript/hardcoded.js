@@ -804,11 +804,12 @@ var renderWeather = function() {
 	var cardHeader = $("<div>");
 	cardHeader.addClass("card-header text-center");
 	var cardHeaderText = $("<h3>");
-	cardHeaderText.text($("#destinationSearch").val() + " ");
+	cardHeaderText.text($("#destinationSearch").val());
 	cardHeaderText.addClass("oswald");
 	var weatherIcon = $("<img>");
 	weatherIcon.attr("alt", weatherObservation.icon);
 	weatherIcon.attr("src", weatherObservation.icon_url);
+	cardHeaderText.append("<br>Current conditions ")
 	cardHeaderText.append(weatherIcon);
 	cardHeader.append(cardHeaderText);
 	currentWeatherCard.append(cardHeader);
@@ -843,10 +844,57 @@ var renderWeather = function() {
 	$("#weather").append(cardRow);
 
 	var forecastRow = $("<div>");
-	forecastRow.addClass("row");
+	forecastRow.addClass("row mt-3");
 	var forecastColumn = $("<div>");
-	forecastColumn.addClass("col-md-12");
+	forecastColumn.addClass("col-md-8 mx-auto justify-content-center");
 
+	var forecastTable = $("<table>");
+	forecastTable.addClass("table table-striped")
+	var tableHead = $("<thead>");
+	var tableHeadRow = $("<tr>");
+
+	var tableHeadDay = $("<th>");
+	tableHeadDay.attr("scope", "col");
+	tableHeadDay.text("Day");
+	tableHeadRow.append(tableHeadDay);
+
+	var tableHeadForecast = $("<th>");
+	tableHeadForecast.addClass("text-center");
+	tableHeadForecast.attr("scope", "col");
+	tableHeadForecast.attr("colspan", 2);
+	tableHeadForecast.text("Forecast");
+	tableHeadRow.append(tableHeadForecast);
+
+	tableHead.append(tableHeadRow);
+	forecastTable.append(tableHead);
+
+	var forecastBody = $("<tbody>");
+
+	for (var i = 0; i < weatherForecast.txt_forecast.forecastday.length; i++) {
+		var forecastEntry = $("<tr>");
+
+		var forecastDay = $("<td>");
+		forecastDay.text(weatherForecast.txt_forecast.forecastday[i].title);
+		forecastEntry.append(forecastDay);
+
+		var forecastIcon = $("<td>");
+		var weatherIcon = $("<img>");
+		weatherIcon.attr("alt", weatherForecast.txt_forecast.forecastday[i].icon);
+		weatherIcon.attr("src", weatherForecast.txt_forecast.forecastday[i].icon_url);
+		forecastIcon.append(weatherIcon);
+		forecastEntry.append(forecastIcon);
+
+		var forecastText = $("<td>");
+		forecastText.text(weatherForecast.txt_forecast.forecastday[i].fcttext);
+		forecastEntry.append(forecastText);
+
+		forecastBody.append(forecastEntry);
+	};
+
+	forecastTable.append(forecastBody);
+	forecastColumn.append(forecastTable);
+	forecastRow.append(forecastColumn);
+	$("#weather").append(forecastRow);
 
 };
 
