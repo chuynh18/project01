@@ -722,41 +722,47 @@ $(document).on("click", ".park-button", function(event) {
     clickedPark = $(this).data("park");
     console.log(clickedPark);
     $('#destinationSearch').val(clickedPark);
-    $('#destinationSearch').submit();
+    var e = $.Event( "keypress", { which: 13 } );
+	$('#destinationSearch').trigger(e);
 
     emptyCardsAndParks();
 
     campgroundSearch();
 
-    parkingSearch();
+	parkingSearch();
 
     window.scrollTo(0, 620);
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 10,
-        center: {lat: 36.505, lng: -117.079}
-    });
+    map.panTo(new google.maps.LatLng(
+		36.505,
+		-117.079
+		));
+
+	map.setZoom(10);
 
     var marker = new google.maps.Marker({
         position: {lat: 36.505, lng: -117.079},
         map: map,
         title: 'Death Valley National Park'
-    });
+	});
 
 });
 
 $(document).on("click", ".attraction", function(event) {
 	window.scrollTo(0, 620);
-	var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
-        center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
-    });
+	map.panTo(new google.maps.LatLng(
+		$(this).data("lat"),
+		$(this).data("lng")
+		));
+	
+	map.setZoom(15);
 
     var marker = new google.maps.Marker({
         position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
         map: map,
         title: $(this).data("name")
-    });
+	});
+
 });
 
 var renderWeather = function() {
@@ -825,6 +831,12 @@ var renderWeather = function() {
 	cardColumn.append(currentWeatherCard);
 	cardRow.append(cardColumn);
 	$("#weather").append(cardRow);
+
+	var forecastRow = $("<div>");
+	forecastRow.addClass("row");
+	var forecastColumn = $("<div>");
+	forecastColumn.addClass("col-md-12");
+
 
 };
 
