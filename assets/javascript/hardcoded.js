@@ -740,11 +740,16 @@ $(document).on("click", ".park-button", function(event) {
 
 	map.setZoom(10);
 
-    var marker = new google.maps.Marker({
+	markers.forEach(function(marker) {
+		marker.setMap(null);
+	});
+	markers = [];
+
+    markers.push(new google.maps.Marker({
         position: {lat: 36.505, lng: -117.079},
         map: map,
         title: 'Death Valley National Park'
-	});
+	}));
 
 });
 
@@ -757,11 +762,16 @@ $(document).on("click", ".attraction", function(event) {
 	
 	map.setZoom(15);
 
-    var marker = new google.maps.Marker({
+	markers.forEach(function(marker) {
+		marker.setMap(null);
+	});
+	markers = [];
+
+    markers.push(new google.maps.Marker({
         position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
         map: map,
         title: $(this).data("name")
-	});
+	}));
 
 });
 

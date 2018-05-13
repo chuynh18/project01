@@ -74,6 +74,7 @@
       
       <script>
         var map;
+        var markers = [];
           function initAutocomplete() {
               map = new google.maps.Map(document.getElementById('map'), {
               center: {lat: 37.872, lng: -122.271},
@@ -91,7 +92,6 @@
               searchBox.setBounds(map.getBounds());
               });
 
-              var markers = [];
               // Listen for the event fired when the user selects a prediction and retrieve
               // more details for that place.
               searchBox.addListener('places_changed', function() {
