@@ -84,19 +84,6 @@ var placesTextSearch = function(type, numResults) {
     };
 })();
 
-// piggybacking off of the google maps search bar to execute a google places search
-document.getElementById("destinationSearch").onkeypress = function(event){
-    if (event.keyCode == 13 || event.which == 13){
-        emptyCardsAndParks();
-
-        placesTextSearch("campground", 6);
-
-        setTimeout(function() {
-            placesTextSearch("parking", 2);
-        }, 1000);
-    }
-};
-
 // for clicking on prepopulated cards
 $(document).on("click", ".park-button", function(event) {
     event.preventDefault()
@@ -345,11 +332,19 @@ var geolocateThenWeatherSearch = function() {
 	});
 };
 
-// also using the google maps text entry box to kick off the weather search =)
+// also using the google maps text entry box to kick off WUnderground and Places text search
 document.getElementById("destinationSearch").onkeypress = function(event){
 	if (event.keyCode == 13 || event.which == 13){
 		
-		geolocateThenWeatherSearch();
+        geolocateThenWeatherSearch();
+
+        emptyCardsAndParks();
+
+        placesTextSearch("campground", 6);
+
+        setTimeout(function() {
+            placesTextSearch("parking", 2);
+        }, 1000);
 
 	};
 };
