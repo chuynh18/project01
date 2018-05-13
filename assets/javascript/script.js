@@ -2,8 +2,11 @@
 
 var placesResponse;
 var clickedPark;
-var campground;
-var parking;
+var geocodeResponse;
+var latitude;
+var longitude;
+var weatherObservation;
+var weatherForecast;
 
 var emptyCardsAndParks = function() {
     $("#cardsHere").empty();
@@ -79,79 +82,69 @@ var placesTextSearch = function(type, numResults) {
     };
 })();
 
-$(document).ready(function() {
-
-    document.getElementById("destinationSearch").onkeypress = function(event){
-        if (event.keyCode == 13 || event.which == 13){
-            emptyCardsAndParks();
-
-            placesTextSearch("campground", 6);
-
-            setTimeout(function() {
-                placesTextSearch("parking", 2);
-            }, 1000);
-        }
-    };
-
-
-
-    // for clicking on prepopulated cards
-    $(document).on("click", ".park-button", function(event) {
-        event.preventDefault()
-
-        clickedPark = $(this).data("park");
-        console.log(clickedPark);
-        $('#destinationSearch').val(clickedPark);
-        $('#destinationSearch').submit();
-
+document.getElementById("destinationSearch").onkeypress = function(event){
+    if (event.keyCode == 13 || event.which == 13){
         emptyCardsAndParks();
 
         placesTextSearch("campground", 6);
 
-            setTimeout(function() {
-                placesTextSearch("parking", 2);
-            }, 1000);
+        setTimeout(function() {
+            placesTextSearch("parking", 2);
+        }, 1000);
+    }
+};
 
-        window.scrollTo(0, 620);
 
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 10,
-            center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
-        });
 
-        var marker = new google.maps.Marker({
-            position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
-            map: map,
-            title: $(this).data("park")
-        });
+// for clicking on prepopulated cards
+$(document).on("click", ".park-button", function(event) {
+    event.preventDefault()
 
+    clickedPark = $(this).data("park");
+    console.log(clickedPark);
+    $('#destinationSearch').val(clickedPark);
+    geolocateThenWeatherSearch();
+
+    emptyCardsAndParks();
+
+    placesTextSearch("campground", 6);
+
+        setTimeout(function() {
+            placesTextSearch("parking", 2);
+        }, 1000);
+
+    window.scrollTo(0, 620);
+
+    map.panTo(new google.maps.LatLng(
+        $(this).data("lat"),
+        $(this).data("lng")
+    ));
+    map.setZoom(10);
+
+    var marker = new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("park")
     });
 
-    // for clicking on campground/parking cards and seeing marker on the map
-    $(document).on("click", ".attraction", function(event) {
-        window.scrollTo(0, 620);
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 15,
-            center: {lat: $(this).data("lat"), lng: $(this).data("lng")}
-        });
+});
 
-        var marker = new google.maps.Marker({
-            position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
-            map: map,
-            title: $(this).data("name")
-        });
+// for clicking on campground/parking cards and seeing marker on the map
+$(document).on("click", ".attraction", function(event) {
+    window.scrollTo(0, 620);
+
+    map.panTo(new google.maps.LatLng(
+        $(this).data("lat"),
+        $(this).data("lng")
+        ));
+    map.setZoom(15);
+
+    var marker = new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("name")
     });
-
-// For weather page
-
-// var weatherResponse;
-
-// var weatherTextSearch = function(){
-//     var weatherQuery = $("#destinationSearch").val();
-//     var queryURL =""
-// }
-
-// });
+});
 
 var renderWeather = function() {
 	$("#weather").empty();
@@ -262,5 +255,3 @@ document.getElementById("destinationSearch").onkeypress = function(event){
 
 	}
 };
-
-});
