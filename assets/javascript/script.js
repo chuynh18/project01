@@ -151,6 +151,101 @@ $(document).on("click", ".attraction", function(event) {
     }));
 });
 
+// show gear based on temperature
+var renderSuggestedGearCards = function(conditions) {
+	for (var i = 0; i < conditions.length; i++) {
+		var bootstrapCard = $("<div>");
+		bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 suggested-gear");
+		bootstrapCard.attr("style", "width: 18rem;");
+
+		var cardBody = $("<div>");
+		cardBody.addClass("card-body");
+		
+		var cardImg = $("<img>");
+		cardImg.addClass("card-img-top");
+		cardImg.attr("src", conditions[i].src);
+		cardImg.attr("alt", conditions[i].name);
+		
+		var cardTitle = $("<h4>");
+		cardTitle.addClass("card-title fredericka");
+		cardTitle.text(conditions[i].name);
+
+		var buyIt = $("<div>");
+		var buyLink = $("<a>");
+		buyLink.addClass("btn btn-success oswald mb-4");
+		buyLink.attr("href", conditions[i].href);
+		buyLink.attr("target", "_blank");
+		buyLink.text("Show me my options!");
+		buyIt.append(buyLink);
+		
+		cardBody.append(cardTitle);
+		bootstrapCard.append(cardImg);
+		bootstrapCard.append(cardBody);
+		bootstrapCard.append(buyIt);
+
+		$("#gearDiv").append(bootstrapCard);
+	};
+};
+
+// show gear based on temperature
+var renderSuggestedGear = function() {
+	// hardcoded gear for hot weather
+	var hotGear = [
+		{name: "Camelbak", src: "assets/images/hot/camelbak.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=camelbak"},
+		{name: "Cooler", src: "assets/images/hot/cooler.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss_1?field-keywords=camping+coolers"},
+		{name: "Sun hats", src: "assets/images/hot/sunhat.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=sun+hat"},
+		{name: "Portable fan and spraybottle", src: "assets/images/hot/waterfan.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=water+fan"}
+	];
+	
+	// hardcoded gear for cold weather
+	var coldGear = [
+		{name: "Instant heat handwarmer", src: "assets/images/cold/instantheat.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=instant+heat+pack"},
+		{name: "Jacket", src: "assets/images/cold/jacket.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=cold+weather+jacket"},
+		{name: "Cold weather sleeping bag", src: "assets/images/cold/sleepingbag.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=sleeping+bag"},
+		{name: "Gloves", src: "assets/images/cold/snowgloves.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=cold+weather+gloves"},
+		{name: "Sweater", src: "assets/images/cold/sweater.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=outdoor+sweater"}
+	];
+
+	// hardcoded gear for general conditions
+	var generalGear = [
+		{name: "Boots", src: "assets/images/regulartemp/boot.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=hiking+boots"},
+		{name: "Water bottle", src: "assets/images/regulartemp/bottle.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=reusable+water+bottle"},
+		{name: "Bug spray", src: "assets/images/regulartemp/bugspray.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=bug+spray"},
+		{name: "First aid kit", src: "assets/images/regulartemp/firstaid.jpg", href: "https://www.amazon.com/s/ref=nb_sb_noss?field-keywords=first+aid"}
+	];
+
+	$("#gear").empty();
+
+	var gearTitleRow = $("<div>");
+	gearTitleRow.addClass("row text-center mt-3 mb-3");
+	var gearTitleColumn = $("<div>");
+	gearTitleColumn.addClass("col-md");
+
+	var gearTitle = $("<h2>");
+	gearTitle.addClass("fredericka");
+	gearTitle.text("Suggested gear")
+	gearTitleColumn.append(gearTitle);
+	gearTitleRow.append(gearTitleColumn);
+
+	$("#gear").append(gearTitleRow);
+
+	var gearDiv = $("<div>");
+	gearDiv.addClass("row justify-content-center text-center");
+	gearDiv.attr("id", "gearDiv");
+
+	$("#gear").append(gearDiv);
+
+	if (weatherObservation.temp_c > 30) {
+		renderSuggestedGearCards(hotGear);	
+	}
+	else if (weatherObservation.temp_c < 10) {
+		renderSuggestedGearCards(coldGear);
+	}
+	else {
+		renderSuggestedGearCards(generalGear);
+	};
+};
+
 var renderWeather = function() {
     // this makes it so future searches don't get appended to the previous search
 	$("#weather").empty();
@@ -293,7 +388,11 @@ var renderWeather = function() {
 	forecastTable.append(forecastBody);
 	forecastColumn.append(forecastTable);
 	forecastRow.append(forecastColumn);
-	$("#weather").append(forecastRow);
+    $("#weather").append(forecastRow);
+    
+    // call renderSuggestedGear() because that function depends on weather data
+    // putting it here means it'll have the correct scope
+    renderSuggestedGear();
 };
 
 var weatherSearch = function() {

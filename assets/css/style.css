@@ -1,44 +1,52 @@
 h1 {
-    font-size: 48pt;
+  font-size: 48pt;
 }
 
 h2 {
-    font-size: 36pt;
+  font-size: 36pt;
 }
 
 .oswald {
-    font-family: 'Oswald', sans-serif;
+  font-family: 'Oswald', sans-serif;
 }
 
 .fredericka {
-    font-family: 'Fredericka the Great', cursive;
+  font-family: 'Fredericka the Great', cursive;
 }
 
 #map {
-    height: 500px;
+  height: 500px;
 }
 
 html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .attraction {
-    display: inline-block;
+  display: inline-block;
 }
 
 .attraction:hover {
-    background-color: #ccc;
+  background-color: #ccc;
+}
+
+.suggested-gear {
+  display: inline-block;
+}
+
+.suggested-gear:hover {
+  background-color: #ccc;
 }
 
 .site-title {
-    color: #eee;
-    font-size: 56pt !important;
+  color: #eee;
+  font-size: 56pt !important;
 }
 
 .form-control {
-    width: 80% !important;
+  width: 80% !important;
 
 }
 
