@@ -1,7 +1,7 @@
-# [Trail Mixed- Web app for Local Hiking Information]
+# Trail Mixed- Web app for Local Hiking Information
 
 ## Description
-Trail Mixed is website application made for hiking information. The application provides a variety of essential information needed to prepare for your hiking activities including:
+Trail Mixed is a website application made for hiking information. The application provides a variety of essential information needed to prepare for your hiking activities including:
 * location
 * weather
 * camping reservations
@@ -12,29 +12,17 @@ Trail Mixed is website application made for hiking information. The application 
 
 **[View Live Preview](https://chuynh18.github.io/project01/)**
 
-## Status
+## Location
+Using the Google Maps API, when a location is typed into the search bar, users are redirected to the specified location on the map. Information regarding that location's coordinates is retrieved from the API to generate information about the closest hiking trails in that region below the map.
 
+## Weather
+The weather functionality of the application ties in with the location functionality. When one of the highighted locations generated from the Google Maps API is clicked on, a four day weather forecast is listed for that area using the wunderground API. Displayed weather information includes current temperature,wind speeds and sky conditions.
 
-## Download and Installation
+## Camping Reservations
 
+## Camping Gear
 
-## Usage
-
-### Basic Usage
-
-
-
-### Advanced Usage
-
-
-## Bugs and Issues
-
-
-
-## Custom Builds
-
-
-
+## Activities
 
 ## Acknowledgements
 Start Bootstrap is an open source library of free Bootstrap templates and themes. All of the free templates and themes on Start Bootstrap are released under the MIT license, which means you can use them for any purpose, even for commercial projects.
