@@ -2,13 +2,13 @@
 
 ## Description
 Trail Mixed is website application made for hiking information. The application provides a variety of essential information needed to prepare for your hiking activities including:
-    * location
-    * weather
-    * camping reservations
-    * camping gear
-    * activities within a specified location
+* location
+* weather
+* camping reservations
+* camping gear
+* activities within a specified location
 
-[![Landing Page Preview](https://chuynh18.github.io/project01/)](https://chuynh18.github.io/project01/)
+[![Landing Page Preview](/img/TrailMixed_website1.PNG)](/img/TrailMixed_website1.PNG)
 
 **[View Live Preview](https://chuynh18.github.io/project01/)**
 
