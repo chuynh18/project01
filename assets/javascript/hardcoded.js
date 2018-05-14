@@ -9,6 +9,17 @@ var weatherObservation;
 var weatherForecast;
 var trails;
 
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyDCG4DjukKJW_yQ-nGvC1UnF2Q8f6hzP_w",
+    authDomain: "not-used-for-hw.firebaseapp.com",
+    databaseURL: "https://not-used-for-hw.firebaseio.com",
+    projectId: "not-used-for-hw",
+    storageBucket: "not-used-for-hw.appspot.com",
+    messagingSenderId: "532977520995"
+  };
+  firebase.initializeApp(config);
+
 var campground = {
 	"html_attributions": [],
 	"results": [
@@ -752,6 +763,13 @@ $(document).on("click", ".park-button", function(event) {
         title: 'Death Valley National Park'
 	}));
 
+	dataRef.ref().push({
+        name: clickedPark,
+        lat: $(this).data("lat"),
+        lng: $(this).data("lng"),
+        dateAdded: firebase.database.ServerValue.TIMESTAMP
+	});
+
 });
 
 $(document).on("click", ".attraction", function(event) {
@@ -768,6 +786,7 @@ $(document).on("click", ".attraction", function(event) {
 	});
 	markers = [];
 
+	// pushing the clicked park into Firebase
     markers.push(new google.maps.Marker({
         position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
         map: map,
