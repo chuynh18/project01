@@ -8,6 +8,7 @@ var longitude;
 var weatherObservation;
 var weatherForecast;
 var trails;
+var recentSearch = [];
 
 // Initialize Firebase
 var config = {
@@ -22,9 +23,23 @@ var config = {
 firebase.initializeApp(config);
 var dataRef = firebase.database();
 
-// retrieve last four searches from Firebase
+// retrieve last four searches from Firebase and append them to the top of the page
 dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", function(snapshot) {
 	console.log(snapshot.val());
+	var searchedName = snapshot.val().name;
+	var searchedLat = snapshot.val().lat;
+	var searchedLng = snapshot.val().lng;
+
+	recentSearch.push(searchedName);
+
+	var searchedSpan = $("<span>");
+	searchedSpan.addClass("nav-item nav-link oswald recentSearches");
+	searchedSpan.attr("data-lat", searchedLat);
+	searchedSpan.attr("data-lng", searchedLng);
+	searchedSpan.attr("data-name", searchedName);
+	searchedSpan.text(searchedName);
+
+	$(".navbar-nav").append(searchedSpan);
 });
 
 var campground = {
@@ -793,13 +808,6 @@ $(document).on("click", ".attraction", function(event) {
 	});
 	markers = [];
 
-	// pushing the clicked park into Firebase
-    markers.push(new google.maps.Marker({
-        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
-        map: map,
-        title: $(this).data("name")
-	}));
-
 });
 
 var renderTrail = function(){
@@ -1125,6 +1133,19 @@ var geolocateThenWeatherSearch = function() {
 		longitude = geocodeResponse.results[0].geometry.location.lng.toFixed(1);
 		weatherSearch();
 		trailSearch();
+
+		// pushing the searched park into Firebase
+		if (recentSearch.indexOf(searchQuery) === -1) {
+			dataRef.ref().push({
+				name: searchQuery,
+				lat: latitude,
+				lng: longitude,
+				dateAdded: firebase.database.ServerValue.TIMESTAMP
+			});
+		}
+		else {
+			console.log("Not pushing this search into Firebase, as it is a duplicate.")
+		};
 	});
 };
 
