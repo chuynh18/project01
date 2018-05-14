@@ -151,6 +151,16 @@ $(document).on("click", ".attraction", function(event) {
     }));
 });
 
+
+
+
+
+
+var weatherTextSearch = function(){
+    var weatherQuery = $("#destinationSearch").val();
+    var queryURL =""
+}
+
 // show gear based on temperature
 var renderSuggestedGearCards = function(conditions) {
 	for (var i = 0; i < conditions.length; i++) {
@@ -246,6 +256,7 @@ var renderSuggestedGear = function() {
 	};
 };
 
+
 var renderWeather = function() {
     // this makes it so future searches don't get appended to the previous search
 	$("#weather").empty();
@@ -261,6 +272,7 @@ var renderWeather = function() {
 	weatherTitle.text("Weather")
 	weatherTitleColumn.append(weatherTitle);
 	weatherTitleRow.append(weatherTitleColumn);
+
 
 	$("#weather").append(weatherTitleRow);
 
@@ -350,6 +362,7 @@ var renderWeather = function() {
 	tableHeadForecast.attr("colspan", 2);
 	tableHeadForecast.text("Forecasted Conditions");
 	tableHeadRow.append(tableHeadForecast);
+
 
 	tableHead.append(tableHeadRow);
 	forecastTable.append(tableHead);
@@ -449,3 +462,4 @@ document.getElementById("destinationSearch").onkeypress = function(event){
         };
 	};
 };
+
