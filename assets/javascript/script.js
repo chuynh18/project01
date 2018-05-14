@@ -1,3 +1,5 @@
+"use strict";
+
 var placesResponse;
 var clickedPark;
 var geocodeResponse;
@@ -19,6 +21,11 @@ var config = {
 
 firebase.initializeApp(config);
 var dataRef = firebase.database();
+
+// retrieve last four searches from Firebase
+dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", function(snapshot) {
+	console.log(snapshot.val());
+});
 
 // this function clears out the 3 prepopulated parks and POI cards
 var emptyCardsAndParks = function() {

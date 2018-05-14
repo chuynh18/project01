@@ -17,8 +17,15 @@ var config = {
     projectId: "not-used-for-hw",
     storageBucket: "not-used-for-hw.appspot.com",
     messagingSenderId: "532977520995"
-  };
-  firebase.initializeApp(config);
+};
+
+firebase.initializeApp(config);
+var dataRef = firebase.database();
+
+// retrieve last four searches from Firebase
+dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", function(snapshot) {
+	console.log(snapshot.val());
+});
 
 var campground = {
 	"html_attributions": [],
