@@ -1,5 +1,3 @@
-"use strict";
-
 var placesResponse;
 var clickedPark;
 var geocodeResponse;
@@ -151,14 +149,36 @@ $(document).on("click", ".attraction", function(event) {
     }));
 });
 
+// show trails nearby
 
+var renderTrail = function(trails) {
+	// Empty trails div every time that future searches don't get appended to previous search
+	$("#trails").empty();
 
+	for (var i=0; i <trails.length; i++) {
+		var bootstrapCard = $("<div>");
+		bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 suggested-trail");
+		bootstrapCard.attr("style", "width: 18rem;");
 
+		var cardBody = $("<div>");
+		cardBody.addClass("card-body");
+		
+		var cardImg = $("<img>");
+		cardImg.addClass("card-img-top");
+		cardImg.attr("src", trails[i].imgSmallMed);
+		cardImg.attr("alt", trails[i].name);
+		
+		var cardTitle = $("<h5>");
+		cardTitle.addClass("card-title fredericka");
+		cardTitle.text(trails[i].name);
 
+		
+		cardBody.append(cardTitle);
+		bootstrapCard.append(cardImg);
+		bootstrapCard.append(cardBody);
+		$("#trails").append(bootstrapCard);
 
-var weatherTextSearch = function(){
-    var weatherQuery = $("#destinationSearch").val();
-    var queryURL =""
+	}
 }
 
 // show gear based on temperature
@@ -408,6 +428,19 @@ var renderWeather = function() {
     renderSuggestedGear();
 };
 
+var trailSearch = function() {
+	var trailqueryURL = "https://www.hikingproject.com/data/get-trails?lat=" + latitude + "&lon="+ longitude +"&maxDistance=10&key=200268815-4f75cb4511228bcd2861fe407fc89421"
+	
+	$.ajax({
+	url: trailqueryURL,
+	method: "GET"
+	}).then(function(trailresponse){
+		console.log(trailresponse);
+		var trails = trailresponse.trails;
+		renderTrail();
+	});
+};
+
 var weatherSearch = function() {
 	// console.log(latitude);
 	// console.log(longitude);
@@ -441,6 +474,7 @@ var geolocateThenWeatherSearch = function() {
 		latitude = geocodeResponse.results[0].geometry.location.lat.toFixed(1); // truncating to 1 decimal place
 		longitude = geocodeResponse.results[0].geometry.location.lng.toFixed(1);
 		weatherSearch();
+		trailSearch();
 	});
 };
 
@@ -452,7 +486,7 @@ document.getElementById("destinationSearch").onkeypress = function(event){
             document.getElementById("errorMsg").textContent = "Don't just leave the search box blank.  Type something in!";
         }
         else {
-            document.getElementById("errorMsg").textContent = "";
+			document.getElementById("errorMsg").textContent = "";
             geolocateThenWeatherSearch();
             emptyCardsAndParks();
             placesTextSearch("campground", 6);
@@ -462,4 +496,6 @@ document.getElementById("destinationSearch").onkeypress = function(event){
         };
 	};
 };
+
+
 
