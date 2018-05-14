@@ -17,8 +17,10 @@ var config = {
     projectId: "not-used-for-hw",
     storageBucket: "not-used-for-hw.appspot.com",
     messagingSenderId: "532977520995"
-  };
-  firebase.initializeApp(config);
+};
+
+firebase.initializeApp(config);
+var dataRef = firebase.database();
 
 var campground = {
 	"html_attributions": [],

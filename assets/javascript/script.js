@@ -1,3 +1,5 @@
+"use strict";
+
 var placesResponse;
 var clickedPark;
 var geocodeResponse;
