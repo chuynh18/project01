@@ -152,11 +152,17 @@ $(document).on("click", ".attraction", function(event) {
 
 // show trails nearby
 
-var renderTrail = function(trails) {
+var renderTrail = function(){
 	// Empty trails div every time that future searches don't get appended to previous search
 	$("#trails").empty();
 
-	for (var i=0; i <trails.length; i++) {
+	// Add header 
+	var hike = $("<h2>");
+	hike.addClass("fredericka");
+	hike.html("<br>Closest Hiking Trails<br>");
+	$("#trails").append(hike);
+
+	for (var i=0; i < trails.length; i++) {
 		var bootstrapCard = $("<div>");
 		bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 suggested-trail");
 		bootstrapCard.attr("style", "width: 18rem;");
@@ -173,14 +179,38 @@ var renderTrail = function(trails) {
 		cardTitle.addClass("card-title fredericka");
 		cardTitle.text(trails[i].name);
 
+		var cardLocation= $("<p>");
+		cardLocation.addClass("card-text oswald");
+		cardLocation.html("<br>Location: " + trails[i].location);
+
+		var cardDistance= $("<p>");
+		cardDistance.addClass("card-text oswald");
+		cardDistance.html("<br>Total distance: " + trails[i].length + " miles");
 		
+		var cardElevation= $("<p>");
+		cardElevation.addClass("card-text oswald");
+		cardElevation.html("<br>Elevation: " + trails[i].ascent + " feet");
+
+		var cardRating= $("<p>");
+		cardRating.addClass("card-text oswald");
+		cardRating.html("<br>Average Rating: " + trails[i].stars + " stars/5 (" + trails[i].starVotes + " ratings)");
+
+		var cardSummary=$("<p>");
+		cardSummary.addClass("card-text oswald");
+		cardSummary.html("<br>" + trails[i].summary);
+		
+		cardRating.append(cardSummary)
+		cardElevation.append(cardRating)
+		cardDistance.append(cardElevation)
+		cardLocation.append(cardDistance)
+		cardTitle.append(cardLocation);
 		cardBody.append(cardTitle);
 		bootstrapCard.append(cardImg);
 		bootstrapCard.append(cardBody);
 		$("#trails").append(bootstrapCard);
 
 	}
-}
+};
 
 // show gear based on temperature
 var renderSuggestedGearCards = function(conditions) {

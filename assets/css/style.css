@@ -24,6 +24,14 @@ html, body {
   padding: 0;
 }
 
+.suggested-trail {
+  display: inline-block;
+}
+
+.suggested-trail:hover {
+  background-color: #ccc;
+}
+
 .attraction {
   display: inline-block;
 }
@@ -697,4 +705,3 @@ footer.footer {
   padding-top: 4rem;
   padding-bottom: 4rem;
 }
-

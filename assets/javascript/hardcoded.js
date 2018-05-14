@@ -7,6 +7,7 @@ var latitude;
 var longitude;
 var weatherObservation;
 var weatherForecast;
+var trails;
 
 var campground = {
 	"html_attributions": [],
@@ -775,6 +776,66 @@ $(document).on("click", ".attraction", function(event) {
 
 });
 
+var renderTrail = function(){
+	// Empty trails div every time that future searches don't get appended to previous search
+	$("#trails").empty();
+
+	// Add header 
+	var hike = $("<h2>");
+	hike.addClass("fredericka");
+	hike.html("<br>Closest Hiking Trails<br>");
+	$("#trails").append(hike);
+
+	for (var i=0; i < trails.length; i++) {
+		var bootstrapCard = $("<div>");
+		bootstrapCard.addClass("card col-md-3 ml-3 mr-3 mb-3 pt-3 suggested-trail");
+		bootstrapCard.attr("style", "width: 18rem;");
+
+		var cardBody = $("<div>");
+		cardBody.addClass("card-body");
+		
+		var cardImg = $("<img>");
+		cardImg.addClass("card-img-top");
+		cardImg.attr("src", trails[i].imgSmallMed);
+		cardImg.attr("alt", trails[i].name);
+		
+		var cardTitle = $("<h5>");
+		cardTitle.addClass("card-title fredericka");
+		cardTitle.text(trails[i].name);
+
+		var cardLocation= $("<p>");
+		cardLocation.addClass("card-text oswald");
+		cardLocation.html("<br>Location: " + trails[i].location);
+
+		var cardDistance= $("<p>");
+		cardDistance.addClass("card-text oswald");
+		cardDistance.html("<br>Total distance: " + trails[i].length + " miles");
+		
+		var cardElevation= $("<p>");
+		cardElevation.addClass("card-text oswald");
+		cardElevation.html("<br>Elevation: " + trails[i].ascent + " feet");
+
+		var cardRating= $("<p>");
+		cardRating.addClass("card-text oswald");
+		cardRating.html("<br>Average Rating: " + trails[i].stars + " stars/5 (" + trails[i].starVotes + " ratings)");
+
+		var cardSummary=$("<p>");
+		cardSummary.addClass("card-text oswald");
+		cardSummary.html("<br>" + trails[i].summary);
+		
+		cardRating.append(cardSummary)
+		cardElevation.append(cardRating)
+		cardDistance.append(cardElevation)
+		cardLocation.append(cardDistance)
+		cardTitle.append(cardLocation);
+		cardBody.append(cardTitle);
+		bootstrapCard.append(cardImg);
+		bootstrapCard.append(cardBody);
+		$("#trails").append(bootstrapCard);
+
+	}
+};
+
 var renderSuggestedGearCards = function(conditions) {
 	for (var i = 0; i < conditions.length; i++) {
 		var bootstrapCard = $("<div>");
@@ -994,6 +1055,19 @@ var renderWeather = function() {
 
 };
 
+var trailSearch = function() {
+	var trailqueryURL = "https://www.hikingproject.com/data/get-trails?lat=" + latitude + "&lon="+ longitude +"&maxDistance=10&key=200268815-4f75cb4511228bcd2861fe407fc89421"
+	
+	$.ajax({
+	url: trailqueryURL,
+	method: "GET"
+	}).then(function(trailresponse){
+		console.log(trailresponse);
+		trails = trailresponse.trails;
+		renderTrail();
+	});
+};
+
 var weatherSearch = function() {
 	console.log(latitude);
 	console.log(longitude);
@@ -1024,6 +1098,7 @@ var geolocateThenWeatherSearch = function() {
 		latitude = geocodeResponse.results[0].geometry.location.lat.toFixed(1);
 		longitude = geocodeResponse.results[0].geometry.location.lng.toFixed(1);
 		weatherSearch();
+		trailSearch();
 	});
 };
 
