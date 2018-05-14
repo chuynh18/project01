@@ -22,6 +22,11 @@ var config = {
 firebase.initializeApp(config);
 var dataRef = firebase.database();
 
+// retrieve last four searches from Firebase
+dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", function(snapshot) {
+	console.log(snapshot.val());
+});
+
 var campground = {
 	"html_attributions": [],
 	"results": [
