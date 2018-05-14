@@ -109,7 +109,18 @@ $(document).ready(function() {
         return false;
     })
 
+
 });
 
 
 
+<<<<<<< HEAD
+=======
+var weatherTextSearch = function(){
+    var weatherQuery = $("#destinationSearch").val();
+    var queryURL =""
+}
+
+});
+
+>>>>>>> 27ef52191df4f19785cbc3f9b16f228912e31efe
