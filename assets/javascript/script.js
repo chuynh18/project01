@@ -7,6 +7,20 @@ var weatherObservation;
 var weatherForecast;
 var trails;
 
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyDCG4DjukKJW_yQ-nGvC1UnF2Q8f6hzP_w",
+    authDomain: "not-used-for-hw.firebaseapp.com",
+    databaseURL: "https://not-used-for-hw.firebaseio.com",
+    projectId: "not-used-for-hw",
+    storageBucket: "not-used-for-hw.appspot.com",
+    messagingSenderId: "532977520995"
+};
+
+firebase.initializeApp(config);
+var dataRef = firebase.database();
+
+// this function clears out the 3 prepopulated parks and POI cards
 var emptyCardsAndParks = function() {
     $("#cardsHere").empty();
     $("#sampleParks").empty();
@@ -122,7 +136,7 @@ $(document).on("click", ".park-button", function(event) {
         position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
         map: map,
         title: $(this).data("park")
-    }));
+	}));
 
 });
 
@@ -209,7 +223,7 @@ var renderTrail = function(){
 		bootstrapCard.append(cardBody);
 		$("#trails").append(bootstrapCard);
 
-	}
+	};
 };
 
 // show gear based on temperature
@@ -324,7 +338,6 @@ var renderWeather = function() {
 	weatherTitleColumn.append(weatherTitle);
 	weatherTitleRow.append(weatherTitleColumn);
 
-
 	$("#weather").append(weatherTitleRow);
 
     // beginning of code that draws the current weather conditions Bootstrap card
@@ -414,7 +427,6 @@ var renderWeather = function() {
 	tableHeadForecast.text("Forecasted Conditions");
 	tableHeadRow.append(tableHeadForecast);
 
-
 	tableHead.append(tableHeadRow);
 	forecastTable.append(tableHead);
 
@@ -459,6 +471,7 @@ var renderWeather = function() {
     renderSuggestedGear();
 };
 
+// this pulls trails near the searched park from Hiking Project
 var trailSearch = function() {
 	var trailqueryURL = "https://www.hikingproject.com/data/get-trails?lat=" + latitude + "&lon="+ longitude +"&maxDistance=10&key=200268815-4f75cb4511228bcd2861fe407fc89421"
 	
@@ -472,6 +485,7 @@ var trailSearch = function() {
 	});
 };
 
+// this queries WU API for the weather and weather forecast at the current location
 var weatherSearch = function() {
 	// console.log(latitude);
 	// console.log(longitude);
@@ -502,10 +516,18 @@ var geolocateThenWeatherSearch = function() {
     method: "GET"
     }).then(function(response) {
 		geocodeResponse = response;
-		latitude = geocodeResponse.results[0].geometry.location.lat.toFixed(1); // truncating to 1 decimal place
-		longitude = geocodeResponse.results[0].geometry.location.lng.toFixed(1);
+		latitude = geocodeResponse.results[0].geometry.location.lat.toFixed(2); // truncating to 2 decimal places
+		longitude = geocodeResponse.results[0].geometry.location.lng.toFixed(2);
 		weatherSearch();
 		trailSearch();
+
+		// pushing the searched park into Firebase
+		dataRef.ref().push({
+        name: searchQuery,
+        lat: latitude,
+        lng: longitude,
+        dateAdded: firebase.database.ServerValue.TIMESTAMP
+		});
 	});
 };
 
@@ -527,6 +549,3 @@ document.getElementById("destinationSearch").onkeypress = function(event){
         };
 	};
 };
-
-
-
