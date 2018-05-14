@@ -5,6 +5,7 @@ var latitude;
 var longitude;
 var weatherObservation;
 var weatherForecast;
+var trails;
 
 var emptyCardsAndParks = function() {
     $("#cardsHere").empty();
@@ -436,7 +437,7 @@ var trailSearch = function() {
 	method: "GET"
 	}).then(function(trailresponse){
 		console.log(trailresponse);
-		var trails = trailresponse.trails;
+		trails = trailresponse.trails;
 		renderTrail();
 	});
 };
