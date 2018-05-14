@@ -2,6 +2,11 @@
 
 var placesResponse;
 var clickedPark;
+var geocodeResponse;
+var latitude;
+var longitude;
+var weatherObservation;
+var weatherForecast;
 
 var campground = {
 	"html_attributions": [],
@@ -685,7 +690,8 @@ var parkingSearch = function() {
         bootstrapCard.attr("style", "width: 18rem;");
         bootstrapCard.attr("data-id", parking.results[i].id);
         bootstrapCard.attr("data-lat", parking.results[i].geometry.location.lat);
-        bootstrapCard.attr("data-lng", parking.results[i].geometry.location.lng);
+		bootstrapCard.attr("data-lng", parking.results[i].geometry.location.lng);
+		bootstrapCard.attr("data-name", parking.results[i].name);
         
         var cardBody = $("<div>");
         cardBody.addClass("card-body");
@@ -716,25 +722,219 @@ $(document).on("click", ".park-button", function(event) {
     clickedPark = $(this).data("park");
     console.log(clickedPark);
     $('#destinationSearch').val(clickedPark);
-    $('#destinationSearch').submit();
+    var e = $.Event( "keypress", { which: 13 } );
+	$('#destinationSearch').trigger(e);
 
     emptyCardsAndParks();
 
     campgroundSearch();
 
-    parkingSearch();
+	parkingSearch();
 
     window.scrollTo(0, 620);
 
-    map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 10,
-        center: {lat: 36.505, lng: -117.079}
-    });
+    map.panTo(new google.maps.LatLng(
+		36.505,
+		-117.079
+		));
 
-    var marker = new google.maps.Marker({
+	map.setZoom(10);
+
+	markers.forEach(function(marker) {
+		marker.setMap(null);
+	});
+	markers = [];
+
+    markers.push(new google.maps.Marker({
         position: {lat: 36.505, lng: -117.079},
         map: map,
         title: 'Death Valley National Park'
-    });
+	}));
 
 });
+
+$(document).on("click", ".attraction", function(event) {
+	window.scrollTo(0, 620);
+	map.panTo(new google.maps.LatLng(
+		$(this).data("lat"),
+		$(this).data("lng")
+		));
+	
+	map.setZoom(15);
+
+	markers.forEach(function(marker) {
+		marker.setMap(null);
+	});
+	markers = [];
+
+    markers.push(new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("name")
+	}));
+
+});
+
+var renderWeather = function() {
+	$("#weather").empty();
+
+	var weatherTitleRow = $("<div>");
+	weatherTitleRow.addClass("row text-center mt-3");
+	var weatherTitleColumn = $("<div>");
+	weatherTitleColumn.addClass("col-md");
+
+	var weatherTitle = $("<h2>");
+	weatherTitle.addClass("fredericka");
+	weatherTitle.text("Weather")
+	weatherTitleColumn.append(weatherTitle);
+	weatherTitleRow.append(weatherTitleColumn);
+
+	$("#weather").append(weatherTitleRow);
+
+	var cardRow = $("<div>");
+	cardRow.addClass("row justify-content-center mx-auto oswald");
+
+	var cardColumn = $("<div>");
+	cardColumn.addClass("col-md-12 justify-content-center mx-auto mb-3");
+
+	var currentWeatherCard = $("<div>");
+	currentWeatherCard.addClass("card mx-auto");
+	currentWeatherCard.attr("style", "width: 26rem;")
+
+	var cardHeader = $("<div>");
+	cardHeader.addClass("card-header text-center");
+	var cardHeaderText = $("<h3>");
+	cardHeaderText.text($("#destinationSearch").val());
+	cardHeaderText.addClass("oswald");
+	var weatherIcon = $("<img>");
+	weatherIcon.attr("alt", weatherObservation.icon);
+	weatherIcon.attr("src", weatherObservation.icon_url);
+	cardHeaderText.append("<br>Current conditions ")
+	cardHeaderText.append(weatherIcon);
+	cardHeader.append(cardHeaderText);
+	currentWeatherCard.append(cardHeader);
+
+	var listGroup = $("<ul>");
+	listGroup.addClass("list-group list-group-flush");
+
+	var listCondition = $("<li>");
+	listCondition.addClass("list-group-item");
+	listCondition.text("Weather: " + weatherObservation.weather);
+	listGroup.append(listCondition);
+
+	var listTemperature = $("<li>");
+	listTemperature.addClass("list-group-item");
+	listTemperature.text("Temperature: " + weatherObservation.temperature_string);
+	listGroup.append(listTemperature);
+
+	var listFeelsLike = $("<li>");
+	listFeelsLike.addClass("list-group-item");
+	listFeelsLike.text("Feels like: " + weatherObservation.feelslike_string);
+	listGroup.append(listFeelsLike);
+
+	var listWind = $("<li>");
+	listWind.addClass("list-group-item");
+	listWind.text("Wind: " + weatherObservation.wind_string);
+	listGroup.append(listWind);
+
+	currentWeatherCard.append(listGroup);
+
+	cardColumn.append(currentWeatherCard);
+	cardRow.append(cardColumn);
+	$("#weather").append(cardRow);
+
+	var forecastRow = $("<div>");
+	forecastRow.addClass("row mt-3");
+	var forecastColumn = $("<div>");
+	forecastColumn.addClass("col-md-8 mx-auto justify-content-center");
+
+	var forecastTable = $("<table>");
+	forecastTable.addClass("table table-striped")
+	var tableHead = $("<thead>");
+	var tableHeadRow = $("<tr>");
+
+	var tableHeadDay = $("<th>");
+	tableHeadDay.attr("scope", "col");
+	tableHeadDay.text("Day");
+	tableHeadRow.append(tableHeadDay);
+
+	var tableHeadForecast = $("<th>");
+	tableHeadForecast.addClass("text-center");
+	tableHeadForecast.attr("scope", "col");
+	tableHeadForecast.attr("colspan", 2);
+	tableHeadForecast.text("Forecast");
+	tableHeadRow.append(tableHeadForecast);
+
+	tableHead.append(tableHeadRow);
+	forecastTable.append(tableHead);
+
+	var forecastBody = $("<tbody>");
+
+	for (var i = 0; i < weatherForecast.txt_forecast.forecastday.length; i++) {
+		var forecastEntry = $("<tr>");
+
+		var forecastDay = $("<td>");
+		forecastDay.text(weatherForecast.txt_forecast.forecastday[i].title);
+		forecastEntry.append(forecastDay);
+
+		var forecastIcon = $("<td>");
+		var weatherIcon = $("<img>");
+		weatherIcon.attr("alt", weatherForecast.txt_forecast.forecastday[i].icon);
+		weatherIcon.attr("src", weatherForecast.txt_forecast.forecastday[i].icon_url);
+		forecastIcon.append(weatherIcon);
+		forecastEntry.append(forecastIcon);
+
+		var forecastText = $("<td>");
+		forecastText.text(weatherForecast.txt_forecast.forecastday[i].fcttext);
+		forecastEntry.append(forecastText);
+
+		forecastBody.append(forecastEntry);
+	};
+
+	forecastTable.append(forecastBody);
+	forecastColumn.append(forecastTable);
+	forecastRow.append(forecastColumn);
+	$("#weather").append(forecastRow);
+
+};
+
+var weatherSearch = function() {
+	console.log(latitude);
+	console.log(longitude);
+	var queryURL = "https://api.wunderground.com/api/a44fd7abe0ac90f0/forecast/geolookup/conditions/q/" + latitude + "," + longitude + ".json";
+		console.log(queryURL);
+    $.ajax({
+    url: queryURL,
+    method: "GET"
+    }).then(function(response) {
+		console.log(response);
+		weatherObservation = response.current_observation;
+		weatherForecast = response.forecast;
+		renderWeather();
+	});
+};
+
+var geolocateThenWeatherSearch = function() {
+	var searchQuery = $("#destinationSearch").val();
+    var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + searchQuery + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ";
+    // console.log(queryURL);
+    
+    // Creates AJAX call
+    $.ajax({
+    url: queryURL,
+    method: "GET"
+    }).then(function(response) {
+		geocodeResponse = response;
+		latitude = geocodeResponse.results[0].geometry.location.lat.toFixed(1);
+		longitude = geocodeResponse.results[0].geometry.location.lng.toFixed(1);
+		weatherSearch();
+	});
+};
+
+document.getElementById("destinationSearch").onkeypress = function(event){
+	if (event.keyCode == 13 || event.which == 13){
+		
+		geolocateThenWeatherSearch();
+
+	}
+};
