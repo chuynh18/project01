@@ -622,6 +622,3 @@ document.getElementById("destinationSearch").onkeypress = function(event){
 	};
 
 };
-
-};
-
