@@ -620,5 +620,4 @@ document.getElementById("destinationSearch").onkeypress = function(event){
             }, 1000);
         };
 	};
-
 };
