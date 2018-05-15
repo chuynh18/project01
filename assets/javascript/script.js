@@ -26,7 +26,7 @@ var dataRef = firebase.database();
 // retrieve last four searches from Firebase and append them to the top of the page
 dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", function(snapshot) {
 	// console.log(snapshot.val());
-	var searchedName = snapshot.val().name;
+	var searchedName = snapshot.val().name.trim();
 	var searchedLat = snapshot.val().lat;
 	var searchedLng = snapshot.val().lng;
 
@@ -61,7 +61,7 @@ var emptyCardsAndParks = function() {
 
 var placesTextSearch = function(type, numResults) {
     // this is where the magic on the client side happens
-    var searchQuery = $("#destinationSearch").val();
+    var searchQuery = $("#destinationSearch").val().trim();
     var queryURL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + searchQuery + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ&type=" + type;
     // console.log(queryURL);
     
@@ -82,7 +82,7 @@ var placesTextSearch = function(type, numResults) {
             bootstrapCard.attr("data-id", placesResponse.results[i].id);
             bootstrapCard.attr("data-lat", placesResponse.results[i].geometry.location.lat);
             bootstrapCard.attr("data-lng", placesResponse.results[i].geometry.location.lng);
-            bootstrapCard.attr("data-name", placesResponse.results[i].name);
+            bootstrapCard.attr("data-name", placesResponse.results[i].name.trim());
             
             var cardBody = $("<div>");
             cardBody.addClass("card-body");
@@ -90,11 +90,11 @@ var placesTextSearch = function(type, numResults) {
             var cardImg = $("<img>");
             cardImg.addClass("card-img-top");
             cardImg.attr("src", "https://maps.googleapis.com/maps/api/place/photo?maxwidth=350&photoreference=" + placesResponse.results[i].photos[0].photo_reference + "&key=AIzaSyD6-UaTdmfPpw2x9P0Hf66Rl2XdzCwJvOQ");
-            cardImg.attr("alt", placesResponse.results[i].name)
+            cardImg.attr("alt", placesResponse.results[i].name.trim())
 
             var cardTitle = $("<h5>");
             cardTitle.addClass("card-title fredericka");
-            cardTitle.text(placesResponse.results[i].name);
+            cardTitle.text(placesResponse.results[i].name.trim());
 
             cardBody.append(cardTitle);
             bootstrapCard.append(cardImg);
