@@ -13,18 +13,20 @@ Trail Mixed is a website application made for hiking information. The applicatio
 **[View Live Preview](https://chuynh18.github.io/project01/)**
 
 ## Location
-Using the Google Maps API, when a location is typed into the search bar, users are redirected to the specified location on the map. Information regarding that location's coordinates is retrieved from the API to generate information about the closest hiking trails in that region below the map.
+Using the Google Maps API, when a location is typed into the search bar, users are redirected to the specified location on the map. Information regarding that location's coordinates is retrieved from the API to generate information about the closest hiking trails and points of interest in that region below the map.
 
 ## Weather
-The weather functionality of the application ties in with the location functionality. When one of the highighted locations generated from the Google Maps API is clicked on, a four day weather forecast is listed for that area using the wunderground API. Displayed weather information includes current temperature,wind speeds and sky conditions.
-
-## Camping Reservations
+The weather functionality of the application ties in with the location functionality. When one of the highighted locations generated from the Google Maps API is clicked on, a four day weather forecast is listed for that area using the wunderground API. Displayed weather information includes current temperature, wind speeds and sky conditions.
 
 ## Camping Gear
+The trail mixed web application makes suggestions for camping gear based on the weather you plan to go hiking in. Three categories of suggested camping gear are gear for cold weather, gear for hot weather and gear for general conditions.
 
-## Activities
 
 ## Acknowledgements
+The APIs used for the project were Google APIs for mapping, WUnderground API for forecasting the weather based on longitude and latitude coordinates, and Hiking Project API for displaying the closest hiking trails in a specified region on the Google Map.
+
+The frontend design was made using Start Bootstrap
+
 Start Bootstrap is an open source library of free Bootstrap templates and themes. All of the free templates and themes on Start Bootstrap are released under the MIT license, which means you can use them for any purpose, even for commercial projects.
 
 * https://startbootstrap.com
