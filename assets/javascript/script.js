@@ -1,3 +1,5 @@
+"use strict";
+
 var placesResponse;
 var clickedPark;
 var geocodeResponse;
@@ -6,7 +8,41 @@ var longitude;
 var weatherObservation;
 var weatherForecast;
 var trails;
+var recentSearch = [];
 
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyDCG4DjukKJW_yQ-nGvC1UnF2Q8f6hzP_w",
+    authDomain: "not-used-for-hw.firebaseapp.com",
+    databaseURL: "https://not-used-for-hw.firebaseio.com",
+    projectId: "not-used-for-hw",
+    storageBucket: "not-used-for-hw.appspot.com",
+    messagingSenderId: "532977520995"
+};
+
+firebase.initializeApp(config);
+var dataRef = firebase.database();
+
+// retrieve last four searches from Firebase and append them to the top of the page
+dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", function(snapshot) {
+	console.log(snapshot.val());
+	var searchedName = snapshot.val().name;
+	var searchedLat = snapshot.val().lat;
+	var searchedLng = snapshot.val().lng;
+
+	recentSearch.push(searchedName);
+
+	var searchedSpan = $("<span>");
+	searchedSpan.addClass("nav-item nav-link oswald recentSearches");
+	searchedSpan.attr("data-lat", searchedLat);
+	searchedSpan.attr("data-lng", searchedLng);
+	searchedSpan.attr("data-name", searchedName);
+	searchedSpan.text(searchedName);
+
+	$(".navbar-nav").append(searchedSpan);
+});
+
+// this function clears out the 3 prepopulated parks and POI cards
 var emptyCardsAndParks = function() {
     $("#cardsHere").empty();
     $("#sampleParks").empty();
@@ -122,7 +158,49 @@ $(document).on("click", ".park-button", function(event) {
         position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
         map: map,
         title: $(this).data("park")
-    }));
+	}));
+
+});
+
+// for clicking on recent searches
+$(document).on("click", ".recentSearches", function(event) {
+
+    clickedPark = $(this).data("name");
+    console.log(clickedPark);
+    $('#destinationSearch').val(clickedPark);
+    geolocateThenWeatherSearch();
+
+    emptyCardsAndParks();
+
+    placesTextSearch("campground", 6);
+
+        setTimeout(function() {
+            placesTextSearch("parking", 2);
+        }, 1000);
+
+    // scrolls the page back up to the google map
+    // desireability of this behavior is debatable
+    window.scrollTo(0, 620);
+
+    // pans the google map to the location of the clicked park
+    map.panTo(new google.maps.LatLng(
+        $(this).data("lat"),
+        $(this).data("lng")
+    ));
+    map.setZoom(10);
+
+    // clears any existing makers
+    markers.forEach(function(marker) {
+        marker.setMap(null);
+    });
+    markers = [];
+
+    // places a marker on the location of the park represented by the card that was clicked
+    markers.push(new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("park")
+	}));
 
 });
 
@@ -209,7 +287,7 @@ var renderTrail = function(){
 		bootstrapCard.append(cardBody);
 		$("#trails").append(bootstrapCard);
 
-	}
+	};
 };
 
 // show gear based on temperature
@@ -324,7 +402,6 @@ var renderWeather = function() {
 	weatherTitleColumn.append(weatherTitle);
 	weatherTitleRow.append(weatherTitleColumn);
 
-
 	$("#weather").append(weatherTitleRow);
 
     // beginning of code that draws the current weather conditions Bootstrap card
@@ -414,7 +491,6 @@ var renderWeather = function() {
 	tableHeadForecast.text("Forecasted Conditions");
 	tableHeadRow.append(tableHeadForecast);
 
-
 	tableHead.append(tableHeadRow);
 	forecastTable.append(tableHead);
 
@@ -459,6 +535,7 @@ var renderWeather = function() {
     renderSuggestedGear();
 };
 
+// this pulls trails near the searched park from Hiking Project
 var trailSearch = function() {
 	var trailqueryURL = "https://www.hikingproject.com/data/get-trails?lat=" + latitude + "&lon="+ longitude +"&maxDistance=10&key=200268815-4f75cb4511228bcd2861fe407fc89421"
 	
@@ -472,6 +549,7 @@ var trailSearch = function() {
 	});
 };
 
+// this queries WU API for the weather and weather forecast at the current location
 var weatherSearch = function() {
 	// console.log(latitude);
 	// console.log(longitude);
@@ -502,10 +580,26 @@ var geolocateThenWeatherSearch = function() {
     method: "GET"
     }).then(function(response) {
 		geocodeResponse = response;
-		latitude = geocodeResponse.results[0].geometry.location.lat.toFixed(1); // truncating to 1 decimal place
-		longitude = geocodeResponse.results[0].geometry.location.lng.toFixed(1);
+		latitude = geocodeResponse.results[0].geometry.location.lat.toFixed(2); // truncating to 2 decimal places
+		longitude = geocodeResponse.results[0].geometry.location.lng.toFixed(2);
 		weatherSearch();
 		trailSearch();
+
+		// pushing the searched park into Firebase
+		// this functionality sits here because geolocateThenWeatherSearch() is called by the text box or the prepopulated cards
+		// plus, it gets access to lat/lng easily
+		if (recentSearch.indexOf(searchQuery) === -1) {
+			dataRef.ref().push({
+				name: searchQuery,
+				lat: latitude,
+				lng: longitude,
+				dateAdded: firebase.database.ServerValue.TIMESTAMP
+			});
+		}
+		else {
+			console.log("Not pushing this search into Firebase, as it is a duplicate.")
+		};
+		
 	});
 };
 
@@ -527,6 +621,4 @@ document.getElementById("destinationSearch").onkeypress = function(event){
         };
 	};
 };
-
-
 
