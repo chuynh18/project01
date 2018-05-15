@@ -25,7 +25,7 @@ var dataRef = firebase.database();
 
 // retrieve last four searches from Firebase and append them to the top of the page
 dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", function(snapshot) {
-	console.log(snapshot.val());
+	// console.log(snapshot.val());
 	var searchedName = snapshot.val().name;
 	var searchedLat = snapshot.val().lat;
 	var searchedLng = snapshot.val().lng;
@@ -40,6 +40,12 @@ dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", functio
 	searchedSpan.text(searchedName);
 
 	$(".navbar-nav").append(searchedSpan);
+
+	// if there are more than 4 recent searches, remove the oldest one
+	var numRecentSearches = document.getElementsByClassName("recentSearches");
+	if (numRecentSearches.length > 4) {
+		numRecentSearches[0].parentNode.removeChild(numRecentSearches[0]);
+	};
 });
 
 // this function clears out the 3 prepopulated parks and POI cards
@@ -94,7 +100,7 @@ var placesTextSearch = function(type, numResults) {
             bootstrapCard.append(cardImg);
             bootstrapCard.append(cardBody);
 
-            $("#cardsHere").append(bootstrapCard);
+			$("#cardsHere").append(bootstrapCard);
         };
 
         // $(".jsonHere").text(JSON.stringify(response,null,'\t'));

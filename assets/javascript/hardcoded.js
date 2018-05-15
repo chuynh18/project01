@@ -40,6 +40,12 @@ dataRef.ref().orderByChild("dateAdded").limitToLast(4).on("child_added", functio
 	searchedSpan.text(searchedName);
 
 	$(".navbar-nav").append(searchedSpan);
+
+	// if there are more than 4 recent searches, remove the oldest one
+	var numRecentSearches = document.getElementsByClassName("recentSearches");
+	if (numRecentSearches.length > 4) {
+		numRecentSearches[0].parentNode.removeChild(numRecentSearches[0]);
+	};
 });
 
 var campground = {
