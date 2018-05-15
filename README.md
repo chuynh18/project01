@@ -4,16 +4,16 @@
 Trail Mixed is a website application made for hiking information. The application provides a variety of essential information needed to prepare for your hiking activities including:
 * location
 * weather
-* camping reservations
 * camping gear
-* activities within a specified location
 
 [![Landing Page Preview](/img/TrailMixed_website1.PNG)](/img/TrailMixed_website1.PNG)
 
 **[View Live Preview](https://chuynh18.github.io/project01/)**
 
 ## Location
-Using the Google Maps API, when a location is typed into the search bar, users are redirected to the specified location on the map. Information regarding that location's coordinates is retrieved from the API to generate information about the closest hiking trails and points of interest in that region below the map.
+Using the Google Maps API, when a location is typed into the search bar, users are redirected to the specified location on the map. Information regarding that location's coordinates is retrieved from the API to generate information about the closest hiking trails and points of interest in that region below the map. Information is also generated when the button on one of the highlighted national parks is clicked
+
+[![Location Demo](https://media.giphy.com/media/fGOfxnrv4vES0ZXU95/giphy.gif)](https://media.giphy.com/media/fGOfxnrv4vES0ZXU95/giphy.gif)
 
 ## Weather
 The weather functionality of the application ties in with the location functionality. When one of the highighted locations generated from the Google Maps API is clicked on, a four day weather forecast is listed for that area using the wunderground API. Displayed weather information includes current temperature, wind speeds and sky conditions.
