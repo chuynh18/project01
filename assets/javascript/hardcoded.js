@@ -794,6 +794,48 @@ $(document).on("click", ".park-button", function(event) {
 
 });
 
+// for clicking on recent searches
+$(document).on("click", ".recentSearches", function(event) {
+
+    clickedPark = $(this).data("name");
+    console.log(clickedPark);
+    $('#destinationSearch').val(clickedPark);
+    geolocateThenWeatherSearch();
+
+    emptyCardsAndParks();
+
+    placesTextSearch("campground", 6);
+
+        setTimeout(function() {
+            placesTextSearch("parking", 2);
+        }, 1000);
+
+    // scrolls the page back up to the google map
+    // desireability of this behavior is debatable
+    window.scrollTo(0, 620);
+
+    // pans the google map to the location of the clicked park
+    map.panTo(new google.maps.LatLng(
+        $(this).data("lat"),
+        $(this).data("lng")
+    ));
+    map.setZoom(10);
+
+    // clears any existing makers
+    markers.forEach(function(marker) {
+        marker.setMap(null);
+    });
+    markers = [];
+
+    // places a marker on the location of the park represented by the card that was clicked
+    markers.push(new google.maps.Marker({
+        position: {lat: $(this).data("lat"), lng: $(this).data("lng")},
+        map: map,
+        title: $(this).data("park")
+	}));
+
+});
+
 $(document).on("click", ".attraction", function(event) {
 	window.scrollTo(0, 620);
 	map.panTo(new google.maps.LatLng(
